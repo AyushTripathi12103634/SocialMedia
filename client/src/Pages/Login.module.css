@@ -1,0 +1,102 @@
+.loginFlipContainer {
+  width: 300px;
+  height: 400px;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.loginFlipCard {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.loginFlipCardInner {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.loginFlipLogin {
+  transform: rotateY(0deg);
+}
+
+.loginFlipRegister {
+  transform: rotateY(180deg);
+}
+
+.loginFlipFileUpload {
+  transform: rotateY(360deg);
+}
+
+.loginFlipCardFront,
+.loginFlipCardBack,
+.loginFlipCardFileUpload {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.loginFlipCardBack {
+  transform: rotateY(180deg);
+}
+
+.loginForm {
+  width: 100%;
+}
+
+.loginForm h2 {
+  margin-bottom: 20px;
+}
+
+.loginForm input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.loginForm button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.loginForm button:hover {
+  background-color: #0056b3;
+}
+
+.loginSwitchButton {
+  margin-top: 10px;
+  background-color: #6c757d;
+}
+
+.loginSwitchButton:hover {
+  background-color: #5a6268;
+}

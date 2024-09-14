@@ -1,0 +1,27 @@
+{
+    "apps": [
+        {
+            "name": "Backend_Service_Dev",
+            "cwd": "./",
+            "script": "server.js",
+            "watch": true,
+            "instances": 1,
+            "env": {
+                "NODE_ENV": "development",
+                "LIMIT": 100
+            }
+        },
+        {
+            "name": "Backend_Service_Prod",
+            "cwd": "./",
+            "script": "server.js",
+            "watch": false,
+            "instances": 1,
+            "max_memory_restart": "384M",
+            "env": {
+                "NODE_ENV": "production",
+                "LIMIT": 50
+            }
+        }
+    ]
+}

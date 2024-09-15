@@ -6,7 +6,7 @@ import path from "path";
 import fs from "fs";
 
 export const registerController = async (req, res) => {
-    // try {
+    try {
         const { username, email, password, name } = req.body;
         const { file } = req;
         const check_username = await authModel.findOne({ username: username });
@@ -30,45 +30,40 @@ export const registerController = async (req, res) => {
             password: hashed_password,
             name
         });
-        // try {
-            console.log('try1');
+        try {
             // Construct new file name
             const fileExtension = path.extname(file.originalname);
             const newFileName = `${user._id}${fileExtension}`;
             const newFilePath = path.join(path.dirname(file.path), newFileName);
 
-            console.log('try4');
-
             // Rename the file
             fs.renameSync(file.path, newFilePath);
-            console.log('try2');
 
             // Call imageUploader with the new file path
             const imageUrl = await imageUploader(newFilePath, "id_docs");
-            console.log('try3');
 
             // Update the user record with the image URL
-            user.profilePicture = imageUrl; // Assuming the user schema has a profilePicture field
+            user.id = imageUrl;
             await user.save();
-        // } catch (error) {
-        //     await authModel.deleteOne({ _id: user._id });
-        //     return res.status(500).send({
-        //         success: false,
-        //         message: "Failed to create the user",
-        //         error: error
-        //     })
-        // }
+        } catch (error) {
+            await authModel.deleteOne({ _id: user._id });
+            return res.status(500).send({
+                success: false,
+                message: "Failed to create the user",
+                error: error
+            })
+        }
         return res.status(201).send({
             success: true,
             message: "User registered successfully"
         });
-    // } catch (error) {
-    //     return res.status(500).send({
-    //         success: false,
-    //         message: "Error in register api",
-    //         error: error,
-    //     })
-    // }
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: "Error in register api",
+            error: error,
+        })
+    }
 }
 
 export const logincontroller = async (req, res) => {
@@ -108,6 +103,11 @@ export const logincontroller = async (req, res) => {
                         expiresIn: "1d"
                     }
                 )
+                req.session.user = {
+                    id: user._id,
+                    username: user.username,
+                    email: user.email
+                }
                 return res.status(200).send({
                     success: true,
                     message: "User logged in successfully",

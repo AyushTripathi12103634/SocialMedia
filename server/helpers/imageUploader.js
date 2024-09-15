@@ -1,5 +1,6 @@
-import cloudinary from '../config/cloudinary.config.js';
+import cloudinary_config from '../config/cloudinary.config.js';
 import fs from 'fs';
+import { v2 as cloudinary } from 'cloudinary';
 
 /**
  * Uploads an image to Cloudinary into a specific folder and returns the image URL.
@@ -8,24 +9,21 @@ import fs from 'fs';
  * @returns {Promise<string>} - The URL of the uploaded image.
  */
 export default async function uploadImage(filePath, folderName) {
-  return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload(filePath, 
-      {
-        folder: folderName // Specify the folder name
-      }, 
-      (error, result) => {
-        if (error) {
-          return reject(error);
-        }
+  try {
+    cloudinary_config();
+    const result = await cloudinary.uploader.upload(filePath, {
+      folder: folderName // Specify the folder name
+    });
 
-        // Delete the file after uploading
-        fs.unlink(filePath, (err) => {
-          if (err) console.error('Failed to delete file:', err);
-        });
+    // Delete the file after uploading
+    fs.unlink(filePath, (err) => {
+      if (err) console.error('Failed to delete file:', err);
+    });
 
-        // Return the URL of the uploaded image
-        resolve(result.secure_url);
-      }
-    );
-  });
+    // Return the URL of the uploaded image
+    return result.secure_url;
+  } catch (error) {
+    console.error('Upload failed:', error);
+    throw error;
+  }
 }
